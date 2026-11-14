@@ -1,0 +1,22 @@
+{
+  "name": "lead-qualifier",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "n8n + Claude lead qualification: score inbound leads with explainable rules, upsert them into HubSpot and alert Slack about hot ones.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build-workflows.mjs",
+    "test": "vitest run",
+    "mock": "node mock/server.mjs",
+    "send-samples": "node scripts/send-sample-leads.mjs",
+    "eval": "node eval/run-eval.mjs",
+    "hubspot:setup": "node scripts/hubspot-setup.mjs"
+  },
+  "devDependencies": {
+    "vitest": "3.2.4"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.3.0"
+  }
+}

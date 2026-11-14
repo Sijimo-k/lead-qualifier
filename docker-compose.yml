@@ -1,0 +1,38 @@
+# Runs n8n plus the demo mock (stand-in for Claude, HubSpot and Slack).
+# Demo mode needs no API keys. For real use, copy .env.example to .env and
+# fill in the real URLs; see README.
+services:
+  n8n:
+    image: n8nio/n8n:2.46.3
+    ports:
+      - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=${TIMEZONE:-UTC}
+      - TZ=${TIMEZONE:-UTC}
+      - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
+      - N8N_SECURE_COOKIE=false
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-http://mock:4010}
+      - HUBSPOT_BASE_URL=${HUBSPOT_BASE_URL:-http://mock:4010}
+      - HUBSPOT_PORTAL_ID=${HUBSPOT_PORTAL_ID:-0}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-http://mock:4010/slack}
+      - FOLLOWUP_AFTER_DAYS=${FOLLOWUP_AFTER_DAYS:-2}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./workflows:/workflows:ro
+      - ./demo:/demo:ro
+    depends_on:
+      - mock
+
+  mock:
+    image: node:22-alpine
+    working_dir: /app
+    command: node mock/server.mjs
+    volumes:
+      - ./mock:/app/mock:ro
+      - ./data:/app/data:ro
+    ports:
+      - "4010:4010"
+
+volumes:
+  n8n_data:

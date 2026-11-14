@@ -1,0 +1,39 @@
+{
+  "budget_usd": [
+    { "min": 10000, "points": 30 },
+    { "min": 3000, "points": 20 },
+    { "min": 1000, "points": 10 },
+    { "min": 0, "points": 0 }
+  ],
+  "budget_unknown_points": 5,
+  "timeline": {
+    "asap": 25,
+    "within_1_month": 20,
+    "one_to_three_months": 10,
+    "later": 0,
+    "unknown": 5
+  },
+  "need_fit": {
+    "strong": 25,
+    "partial": 10,
+    "none": 0
+  },
+  "decision_maker": {
+    "yes": 10,
+    "unknown": 3,
+    "no": 0
+  },
+  "company_size": {
+    "solo": 2,
+    "2_10": 5,
+    "11_50": 8,
+    "51_200": 10,
+    "200_plus": 10,
+    "unknown": 3
+  },
+  "tiers": {
+    "hot": 70,
+    "warm": 40
+  },
+  "no_fit_max_tier": "cold"
+}

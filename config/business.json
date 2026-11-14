@@ -1,0 +1,20 @@
+{
+  "company_name": "Northwind Automation",
+  "description": "A small studio that builds workflow automations and system integrations for small and mid-sized businesses.",
+  "services": [
+    "Workflow automation with n8n, Make or Zapier",
+    "CRM setup and integrations (HubSpot, GoHighLevel, Pipedrive)",
+    "Google Workspace automation (Sheets, Gmail, Apps Script)",
+    "E-commerce order and inventory integrations (Shopify, marketplaces)",
+    "AI features inside existing workflows (classification, extraction, drafting)"
+  ],
+  "not_offered": [
+    "SEO, link building or paid ads management",
+    "Mobile game development",
+    "Hardware or on-site IT support"
+  ],
+  "reply_signature": "Northwind Automation team",
+  "jpy_per_usd": 150,
+  "eur_per_usd": 0.92,
+  "gbp_per_usd": 0.79
+}
