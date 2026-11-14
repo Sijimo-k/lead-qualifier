@@ -93,7 +93,7 @@ function respond(name, responseBody, responseCode = 200) {
 
 // Credentials are referenced by name; you create them once in n8n (see README).
 const ANTHROPIC_CREDENTIAL = { id: "anthropic-api-key", name: "Anthropic API key" };
-const HUBSPOT_CREDENTIAL = { id: "hubspot-app-token", name: "HubSpot private app token" };
+const HUBSPOT_CREDENTIAL = { id: "hubspot-app-token", name: "HubSpot service key" };
 
 const CLAUDE_HEADERS = [
   { name: "anthropic-version", value: "2026-10-21" },

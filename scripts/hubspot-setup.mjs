@@ -1,13 +1,15 @@
 // Creates the custom contact properties the workflows write to.
-// Run once per HubSpot account:
+// Run once per HubSpot account. Use a service key (Development > Keys > Service keys);
+// legacy private app tokens also work. HubSpot stopped new private apps on 2026-10-26.
+// Run:
 //   HUBSPOT_TOKEN=pat-... npm run hubspot:setup
-// The private app needs the scopes crm.objects.contacts.read/write and
+// The key needs the scopes crm.objects.contacts.read/write and
 // crm.schemas.contacts.write. Safe to run again: existing properties are skipped.
 
 const token = process.env.HUBSPOT_TOKEN;
 const base = process.env.HUBSPOT_BASE_URL || "https://api.hubapi.com";
 if (!token) {
-  console.error("Set HUBSPOT_TOKEN to your private app token first.");
+  console.error("Set HUBSPOT_TOKEN to your HubSpot service key first.");
   process.exit(1);
 }
 

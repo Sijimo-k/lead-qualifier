@@ -239,7 +239,7 @@
       "credentials": {
         "httpHeaderAuth": {
           "id": "hubspot-app-token",
-          "name": "HubSpot private app token"
+          "name": "HubSpot service key"
         }
       },
       "retryOnFail": true,
@@ -284,7 +284,7 @@
       "credentials": {
         "httpHeaderAuth": {
           "id": "hubspot-app-token",
-          "name": "HubSpot private app token"
+          "name": "HubSpot service key"
         }
       },
       "retryOnFail": true,
