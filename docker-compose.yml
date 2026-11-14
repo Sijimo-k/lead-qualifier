@@ -15,6 +15,7 @@ services:
       - ANTHROPIC_BASE_URL=${ANTHROPIC_BASE_URL:-http://mock:4010}
       - HUBSPOT_BASE_URL=${HUBSPOT_BASE_URL:-http://mock:4010}
       - HUBSPOT_PORTAL_ID=${HUBSPOT_PORTAL_ID:-0}
+      - HUBSPOT_UI_DOMAIN=${HUBSPOT_UI_DOMAIN:-app.hubspot.com}
       - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-http://mock:4010/slack}
       - FOLLOWUP_AFTER_DAYS=${FOLLOWUP_AFTER_DAYS:-2}
     volumes:

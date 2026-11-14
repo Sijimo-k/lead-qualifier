@@ -216,7 +216,7 @@ return {
       body: `
 const prep = $('Prepare CRM payloads').item.json;
 const contactId = $json.results[0].id;
-const contactUrl = 'https://app.hubspot.com/contacts/' + ($env.HUBSPOT_PORTAL_ID || '0') + '/record/0-1/' + contactId;
+const contactUrl = 'https://' + ($env.HUBSPOT_UI_DOMAIN || 'app.hubspot.com') + '/contacts/' + ($env.HUBSPOT_PORTAL_ID || '0') + '/record/0-1/' + contactId;
 return {
   json: {
     ...prep,
