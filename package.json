@@ -10,8 +10,8 @@
     "test": "vitest run",
     "mock": "node mock/server.mjs",
     "send-samples": "node scripts/send-sample-leads.mjs",
-    "eval": "node eval/run-eval.mjs",
-    "hubspot:setup": "node scripts/hubspot-setup.mjs"
+    "eval": "node --env-file-if-exists=.env eval/run-eval.mjs",
+    "hubspot:setup": "node --env-file-if-exists=.env scripts/hubspot-setup.mjs"
   },
   "devDependencies": {
     "vitest": "3.2.4"

@@ -156,6 +156,13 @@ function route(method, path, body) {
     list.push(record);
     return [201, record];
   }
+  if (method === "POST" && (path === "/crm/v3/properties/contacts" || path === "/crm/v3/properties/contacts/groups")) {
+    state.properties ??= [];
+    const key = `${path}:${body.name}`;
+    if (state.properties.includes(key)) return [409, { message: "already exists" }];
+    state.properties.push(key);
+    return [201, body];
+  }
   if (method === "POST" && path === "/slack") {
     state.slack.push(body);
     return [200, "ok"];
