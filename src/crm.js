@@ -17,6 +17,7 @@ export function hubspotContactUpsert(lead, result, signals, splitNameFn) {
     ai_lead_summary: signals ? signals.summary : "",
     ai_score_reasons: result.reasons.join("\n"),
     ai_service_requested: signals ? signals.service_requested : "",
+    ai_lead_language: signals ? signals.language : "",
   };
   // Never overwrite existing CRM data with empty strings.
   for (const key of Object.keys(properties)) {
@@ -69,6 +70,31 @@ export function slackAlert(lead, result, signals, contactUrl) {
       { type: "section", text: { type: "mrkdwn", text: detail } },
       { type: "context", elements: [{ type: "mrkdwn", text: result.reasons.join(" | ") }] },
       { type: "section", text: { type: "mrkdwn", text: `<${contactUrl}|Open in HubSpot>` } },
+    ],
+  };
+}
+
+/** Short, readable reason from an HTTP error such as `400 - "{...INVALID_EMAIL...}"`. */
+export function crmErrorReason(rawError) {
+  const raw = String(rawError || "unknown error");
+  const status = (raw.match(/^(\d{3})/) || [])[1];
+  const code = (raw.match(/\\?"code\\?"\s*:\s*\\?"([A-Z_]+)/) || [])[1] || (raw.match(/\b(INVALID_[A-Z_]+|[A-Z]+_ERROR)\b/) || [])[1];
+  if (status) return `HubSpot rejected the contact (HTTP ${status}${code ? `, ${code}` : ""})`;
+  return `HubSpot request failed: ${raw.slice(0, 200)}`;
+}
+
+/** Slack message used when the CRM write fails, so the lead is never silently lost. */
+export function crmErrorAlert(lead, result, reason) {
+  const contact = [lead.name, lead.company, lead.email].filter(Boolean).join(" · ");
+  return {
+    text: `:rotating_light: Lead could not be saved to HubSpot: ${lead.name || lead.email}`,
+    blocks: [
+      {
+        type: "section",
+        text: { type: "mrkdwn", text: `*:rotating_light: Lead could not be saved to HubSpot*\n${contact}` },
+      },
+      { type: "section", text: { type: "mrkdwn", text: `*Reason:* ${reason}\n*AI result:* ${result.tier} (${result.score}/100)` } },
+      { type: "section", text: { type: "mrkdwn", text: `*Message*\n${lead.message.slice(0, 2500)}` } },
     ],
   };
 }

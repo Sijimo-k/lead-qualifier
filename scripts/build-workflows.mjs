@@ -210,7 +210,27 @@ return {
       url: hubspotUrl("/crm/v3/objects/contacts/batch/upsert"),
       credential: HUBSPOT_CREDENTIAL,
       jsonBody: "={{ JSON.stringify($json.hubspot_upsert) }}",
+      onError: "continueErrorOutput",
     }),
+    code("Build CRM error alert", {
+      modules: ["src/crm.js"],
+      body: `
+const prep = $('Prepare CRM payloads').item.json;
+const raw = ($json.error && ($json.error.message || $json.error.description)) || $json.message;
+const reason = crmErrorReason(raw);
+return {
+  json: {
+    slack: crmErrorAlert(prep.lead, prep.result, reason),
+    response: { status: 'crm_error', tier: prep.result.tier, score: prep.result.score, reasons: prep.result.reasons, error: reason },
+  },
+};`,
+    }),
+    http("Slack: CRM error", {
+      method: "POST",
+      url: SLACK_URL,
+      jsonBody: "={{ JSON.stringify($json.slack) }}",
+    }),
+    respond("Respond (CRM error)", "={{ JSON.stringify($('Build CRM error alert').item.json.response) }}"),
     code("Build note & alert", {
       modules: ["src/crm.js"],
       body: `
@@ -232,6 +252,7 @@ return {
       url: hubspotUrl("/crm/v3/objects/notes"),
       credential: HUBSPOT_CREDENTIAL,
       jsonBody: "={{ JSON.stringify($json.note) }}",
+      onError: "continueRegularOutput",
     }),
     ifNode("Alert sales?", "={{ $('Build note & alert').item.json.alert }}", true),
     http("Slack: alert sales", {
@@ -258,6 +279,9 @@ return {
     "Build note & alert": [1980, 260],
     "HubSpot: add note": [2200, 260],
     "Alert sales?": [2420, 260],
+    "Build CRM error alert": [1980, 480],
+    "Slack: CRM error": [2200, 480],
+    "Respond (CRM error)": [2420, 480],
     "Slack: alert sales": [2640, 160],
     Respond: [2860, 260],
   },
@@ -274,6 +298,9 @@ return {
     ["Prepare CRM payloads", 0, "Spam?"],
     ["Spam?", 0, "Respond (spam ignored)"],
     ["Spam?", 1, "HubSpot: upsert contact"],
+    ["HubSpot: upsert contact", 1, "Build CRM error alert"],
+    ["Build CRM error alert", 0, "Slack: CRM error"],
+    ["Slack: CRM error", 0, "Respond (CRM error)"],
     ["HubSpot: upsert contact", 0, "Build note & alert"],
     ["Build note & alert", 0, "HubSpot: add note"],
     ["HubSpot: add note", 0, "Alert sales?"],

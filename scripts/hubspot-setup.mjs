@@ -26,6 +26,13 @@ const PROPERTIES = [
   },
   { name: "ai_lead_summary", label: "AI lead summary", type: "string", fieldType: "textarea" },
   { name: "ai_score_reasons", label: "AI score reasons", type: "string", fieldType: "textarea" },
+  {
+    name: "ai_lead_language",
+    label: "AI lead language",
+    type: "enumeration",
+    fieldType: "select",
+    options: ["en", "ja", "other"].map((value, i) => ({ label: value, value, displayOrder: i })),
+  },
   { name: "ai_service_requested", label: "AI service requested", type: "string", fieldType: "text" },
   { name: "ai_followup_drafted_at", label: "AI follow-up drafted at", type: "datetime", fieldType: "date" },
 ];

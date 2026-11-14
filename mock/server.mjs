@@ -99,6 +99,12 @@ function claudeResponse(body) {
 }
 
 function upsertContacts(body) {
+  // Like the real HubSpot API: reserved .example addresses are rejected.
+  const bad = (body.inputs || []).find((input) => /\.example$/i.test(input.id || ""));
+  if (bad) {
+    const message = `Email address ${bad.id} is invalid`;
+    return [400, { status: "error", message, errors: [{ message, code: "INVALID_EMAIL" }], category: "VALIDATION_ERROR" }];
+  }
   const results = (body.inputs || []).map((input) => {
     let contact = state.contacts.find((c) => c.properties.email === input.id);
     const now = new Date().toISOString();

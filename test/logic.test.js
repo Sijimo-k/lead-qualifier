@@ -74,7 +74,7 @@ describe("buildClaudeRequest", () => {
   it("does not send the full email address to the model", () => {
     const message = buildUserMessage(lead);
     expect(message).not.toContain("maria@");
-    expect(message).toContain("Email domain: brightcandles.example");
+    expect(message).toContain("Email domain: brightcandles.example.com");
   });
 
   it("treats the enquiry as data, not instructions", () => {
@@ -146,9 +146,10 @@ describe("CRM payloads", () => {
     const body = hubspotContactUpsert(lead, result, sample.mock_signals, splitName);
     const input = body.inputs[0];
     expect(input.idProperty).toBe("email");
-    expect(input.id).toBe("sato@umeboshi-shop.example");
+    expect(input.id).toBe("sato@umeboshi-shop.example.com");
     expect(input.properties.lastname).toBe("佐藤");
     expect(input.properties.ai_lead_tier).toBe("hot");
+    expect(input.properties.ai_lead_language).toBe("ja");
     expect(input.properties).not.toHaveProperty("website");
   });
 
@@ -172,5 +173,25 @@ describe("CRM payloads", () => {
     const note = hubspotNote("9", lead, failed, null, NOW);
     expect(note.properties.hs_note_body).toContain("review manually");
     expect(slackAlert(lead, failed, null, "x").text).toContain("manual review");
+  });
+});
+
+describe("CRM error handling", () => {
+  it("turns an HTTP error into a short reason", async () => {
+    const { crmErrorReason } = await import("../src/crm.js");
+    const raw = '400 - "{\\"status\\":\\"error\\",\\"errors\\":[{\\"message\\":\\"invalid\\",\\"code\\":\\"INVALID_EMAIL\\"}]}"';
+    expect(crmErrorReason(raw)).toBe("HubSpot rejected the contact (HTTP 400, INVALID_EMAIL)");
+    expect(crmErrorReason("socket hang up")).toBe("HubSpot request failed: socket hang up");
+  });
+
+  it("alerts Slack with the whole lead so nothing is lost", async () => {
+    const { crmErrorAlert } = await import("../src/crm.js");
+    const lead = normalizeLead(samples[0].lead, NOW);
+    const alert = crmErrorAlert(lead, { tier: "hot", score: 93 }, "HubSpot rejected the contact (HTTP 400, INVALID_EMAIL)");
+    expect(alert.text).toContain("could not be saved");
+    const text = JSON.stringify(alert.blocks);
+    expect(text).toContain("INVALID_EMAIL");
+    expect(text).toContain("hot (93/100)");
+    expect(text).toContain("Shopify candle shop");
   });
 });

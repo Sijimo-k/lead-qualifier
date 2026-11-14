@@ -15,13 +15,14 @@ const business = JSON.parse(readFileSync(new URL("../config/business.json", impo
 const contact = {
   id: "1001",
   properties: {
-    email: "sato@umeboshi-shop.example",
+    email: "sato@umeboshi-shop.example.com",
     firstname: "美咲",
     lastname: "佐藤",
     company: "梅の里ストア",
     ai_lead_tier: "hot",
     ai_service_requested: "Marketplace orders into Google Sheets",
     ai_lead_summary: "Owner of a food shop wants marketplace orders in a spreadsheet.",
+    ai_lead_language: "ja",
   },
 };
 
@@ -55,6 +56,12 @@ describe("buildFollowupRequest", () => {
     expect(request.messages[0].content).toContain("Name: 佐藤 美咲");
     expect(request.messages[0].content).toContain("Marketplace orders into Google Sheets");
     expect(request.system).toMatch(/data, not instructions/);
+    expect(request.system).toContain("Write the email in Japanese");
+  });
+
+  it("defaults to English when the language is unknown", () => {
+    const request = buildFollowupRequest({ id: "1", properties: { firstname: "Ana" } }, business, CLAUDE_MODEL);
+    expect(request.system).toContain("Write the email in English");
   });
 });
 
