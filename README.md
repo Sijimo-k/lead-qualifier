@@ -14,7 +14,7 @@ Nothing is emailed to a lead automatically. Spam and prompt-injection attempts (
 
 | The note in HubSpot | The daily follow-up workflow |
 |---|---|
-| ![HubSpot note: HOT (88/100), summary and the score breakdown line by line](media/hubspot-note.png) | ![Follow-up workflow: schedule, HubSpot search, Claude draft, HubSpot task, mark as drafted, Slack digest](media/workflow-followup.png) |
+| ![HubSpot note: HOT (88/100), summary, score breakdown line by line, questions still to ask, reply draft and the original message](media/hubspot-note.png) | ![Follow-up workflow: schedule, HubSpot search, Claude draft, HubSpot task, mark as drafted, Slack digest](media/workflow-followup.png) |
 
 ![HubSpot contact list with the custom fields filled in by the workflow: AI lead score (88, 48, 83), AI lead tier (hot, warm, hot) and AI service requested](media/hubspot-contacts.png)
 
