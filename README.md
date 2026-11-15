@@ -16,6 +16,8 @@ Nothing is emailed to a lead automatically. Spam and prompt-injection attempts (
 |---|---|
 | ![HubSpot note: HOT (88/100), summary and the score breakdown line by line](media/hubspot-note.png) | ![Follow-up workflow: schedule, HubSpot search, Claude draft, HubSpot task, mark as drafted, Slack digest](media/workflow-followup.png) |
 
+![HubSpot contact list with the custom fields filled in by the workflow: AI lead score (88, 48, 83), AI lead tier (hot, warm, hot) and AI service requested](media/hubspot-contacts.png)
+
 ## Try it (demo mode, no keys needed)
 
 Demo mode runs n8n with a small mock that stands in for the Claude, HubSpot and Slack APIs, so you can watch every step without accounts or costs. You need Docker and Node.js 22+.
